@@ -1,0 +1,13 @@
+{
+    "KPackageStructure": "KSysguard/SensorFace",
+    "KPlugin": {
+        "Authors": [ { "Name": "Fabrizio Ferrari" } ],
+        "Description": "Segmented bars with a green-to-red scale; sensors sharing a label are merged into one row (average + peak)",
+        "Icon": "view-list-text",
+        "Id": "local.graduatedbars",
+        "License": "GPL-3.0-or-later",
+        "Name": "Graduated Bars",
+        "Version": "1.0"
+    },
+    "X-KDE-ParentApp": "org.kde.plasmashell"
+}
