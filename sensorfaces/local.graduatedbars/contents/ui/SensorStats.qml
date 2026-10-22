@@ -32,7 +32,12 @@ QtObject {
         const value = count > 0 ? sum / count : 0;
         const unit = first ? first.unit : Formatter.Units.UnitInvalid;
         let display = first ? first.formattedValue : "";
-        if (unit === Formatter.Units.UnitMegaHertz) {
+        if (first && first.status !== Sensors.Sensor.Ready) {
+            // Metadata not loaded yet: without a unit the raw number ("24.500000000000004") would
+            // widen the value columns, which only ever grow, and squeeze the bars for good.
+            // Not a unit check: text sensors (OS name, kernel) keep UnitInvalid once loaded too
+            display = "";
+        } else if (unit === Formatter.Units.UnitMegaHertz) {
             // Always GHz, so clocks don't jump between "605.0 MHz" and "3.3 GHz"
             display = Formatter.Formatter.formatValueShowNull(value, unit, Formatter.Units.MetricPrefixGiga);
         } else if (sensors.count > 1) {
