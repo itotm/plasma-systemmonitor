@@ -17,6 +17,15 @@ QtObject {
 
     property var stats: summarize()
 
+    // Values computed here, not by the sensor. Clocks always in GHz, so they don't jump between
+    // "605.0 MHz" and "3.3 GHz". Anything else with one decimal: the formatter drops it for whole
+    // numbers coming from JS ("4%" next to "4.1%"), and with it an idle core reads "0.0%", not nothing
+    function format(v, unit) {
+        return unit === Formatter.Units.UnitMegaHertz
+            ? Formatter.Formatter.formatValueShowNull(v, unit, Formatter.Units.MetricPrefixGiga)
+            : Formatter.Formatter.formatValueWithPrecision(v, unit, 1);
+    }
+
     function summarize() {
         let sum = 0, count = 0, top = -Infinity;
         for (let i = 0; i < sensors.count; ++i) {
@@ -37,13 +46,11 @@ QtObject {
             // widen the value columns, which only ever grow, and squeeze the bars for good.
             // Not a unit check: text sensors (OS name, kernel) keep UnitInvalid once loaded too
             display = "";
-        } else if (unit === Formatter.Units.UnitMegaHertz) {
-            // Always GHz, so clocks don't jump between "605.0 MHz" and "3.3 GHz"
-            display = Formatter.Formatter.formatValueShowNull(value, unit, Formatter.Units.MetricPrefixGiga);
-        } else if (sensors.count > 1) {
-            // ShowNull: an idle core reads "0.0%" instead of nothing
-            display = Formatter.Formatter.formatValueShowNull(value, unit);
+        } else if (unit === Formatter.Units.UnitMegaHertz || sensors.count > 1) {
+            display = format(value, unit);
         }
+        // Empty like the value until the metadata arrives
+        const peakText = count === 0 || display === "" ? "" : format(top, unit);
         return {
             value: value,
             peak: count > 0 ? top : 0,
@@ -52,6 +59,7 @@ QtObject {
             maximum: first ? first.maximum : 0,
             name: first ? (first.shortName || first.name) : "",
             text: display,
+            peakText: peakText,
             merged: sensors.count > 1
         };
     }
