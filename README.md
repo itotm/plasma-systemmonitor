@@ -110,6 +110,10 @@ Other behaviour:
 - Note: if you delete rows from *Edit Page*, System Monitor can leave stale `[page][row-N]` groups in the file, so rows get duplicated or disappear after a restart. To change the row structure, edit the file by hand.
 - Sensor IDs are listed by `kstatsviewer --list`, in the sensor list of a face in *Edit Page*, or by `sensors` for the `lmsensors/<chip>/<sensor>` ones.
 
+## Acknowledgements
+
+Developed with the help of an LLM (Claude).
+
 ## License
 
 [GPL-3.0-or-later](LICENSE).
