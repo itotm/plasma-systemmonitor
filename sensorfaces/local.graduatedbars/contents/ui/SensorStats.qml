@@ -67,6 +67,8 @@ QtObject {
             updateRateLimit: root.updateRateLimit
             onValueChanged: root.recompute()
             onMetaDataChanged: root.recompute()
+            // metaDataChanged can come before the status turns Ready, and text sensors never change value
+            onStatusChanged: root.recompute()
         }
         onObjectAdded: root.recompute()
         onObjectRemoved: root.recompute()

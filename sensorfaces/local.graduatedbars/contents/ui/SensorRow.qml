@@ -117,6 +117,7 @@ RowLayout {
         font.features: { "tnum": 1 }
         opacity: 0.6
         onImplicitWidthChanged: row.widthsNeeded(0, 0, implicitWidth, 0)
-        text: row.showPeak ? "▲ " + Formatter.Formatter.formatValue(row.stats.peak, row.stats.unit, row.stats.unit === Formatter.Units.UnitMegaHertz ? Formatter.Units.MetricPrefixGiga : Formatter.Units.MetricPrefixAutoAdjust) : ""
+        // Empty like the value until the metadata arrives, or the raw peak would widen the column
+        text: row.showPeak && row.stats.text !== "" ? "▲ " + Formatter.Formatter.formatValue(row.stats.peak, row.stats.unit, row.stats.unit === Formatter.Units.UnitMegaHertz ? Formatter.Units.MetricPrefixGiga : Formatter.Units.MetricPrefixAutoAdjust) : ""
     }
 }
